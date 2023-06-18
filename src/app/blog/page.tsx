@@ -1,29 +1,25 @@
+"use client";
+import { useState, useEffect } from "react";
 import { NextPage } from "next";
+import { getAllPosts } from "@/services/getPosts";
 import Link from "next/link";
+import Posts from "@/components/Posts";
+import PostSearch from "@/components/PostSearch";
 
-async function getData() {
-  const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
-    next: {
-      revalidate: 60,
-    },
-  });
-  return response.json();
-}
+const Page: NextPage = () => {
+  const [posts, setPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-const Page: NextPage = async () => {
-  const posts = await getData();
+  useEffect(() => {
+    getAllPosts()
+      .then(setPosts)
+      .finally(() => setLoading(false));
+  }, []);
   return (
-    <div className="my-6 flex flex-col gap-3">
-      {posts.map((post: any) => (
-        <Link
-          className="w-100 flex h-8 items-center rounded-lg bg-gray-200 p-3"
-          key={post.id}
-          href={`/blog/${post.id}`}
-        >
-          {post.title}
-        </Link>
-      ))}
-    </div>
+    <>
+      <PostSearch onSearch={setPosts} />
+      {loading ? <h3> loading </h3> : <Posts posts={posts} />}
+    </>
   );
 };
 

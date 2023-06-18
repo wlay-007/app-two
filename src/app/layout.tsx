@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import TheFooter from "@/components/TheFooter";
 import TheHeader from "@/components/TheHeader";
 import "./globals.css";
+import { Providers } from "@/components/Provider";
 // import { Inter } from "next/font/google";
 
 export const metadata: Metadata = {
@@ -17,11 +18,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className=" flex min-h-screen flex-col">
-        <TheHeader />
-        <main className="align-center flex flex-1 items-center justify-center ">
-          {children}
-        </main>
-        <TheFooter />
+        <Providers>
+          <TheHeader />
+          <main className="align-center flex flex-1 flex-col items-center justify-center ">
+            {children}
+          </main>
+          <TheFooter />
+        </Providers>
       </body>
     </html>
   );
